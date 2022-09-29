@@ -61,12 +61,12 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
             viewModel.consultFilterCriptoCurrency()
         }
 
-        viewModel.getCriptoCurrency().observe(viewLifecycleOwner) { response->
+        viewModel.getCriptoCurrency().observe(viewLifecycleOwner) { response ->
             binding.progressCircular.visibility = View.INVISIBLE
             response?.let {
                 updateAdapter(it)
 
-            } ?: Toast.makeText(requireContext(),"No tienes internet", Toast.LENGTH_SHORT).show()
+            } ?: Toast.makeText(requireContext(), "No tienes internet", Toast.LENGTH_SHORT).show()
 
         }
 

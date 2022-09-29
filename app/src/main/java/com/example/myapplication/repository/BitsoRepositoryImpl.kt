@@ -11,7 +11,7 @@ class BitsoRepositoryImpl @Inject constructor(private val netwokrDataSource: Net
 
     override suspend fun loadCripto(): CriptoResponse = netwokrDataSource.loadCriptoCurrency()
     override suspend fun loadCriptoList(): List<CriptoCurrency> = netWorkLocalData.loadCriptoCurrency()
-    override suspend fun saveDataList(data: List<CriptoCurrency>) {
-        netWorkLocalData.saveCripto(data)
-    }
+    override suspend fun saveDataList(data: List<CriptoCurrency>) = netWorkLocalData.saveCripto(data)
+
+
 }
