@@ -10,6 +10,7 @@ import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.useCases.LoadAllCriptoCurrencyUseCase
 import com.example.myapplication.useCases.LoadCriptoWithFilterCurrencyUseCase
 import com.example.myapplication.useCases.LoadLocalCriptoCurrencyUseCase
+import com.example.myapplication.useCases.SaveLocalCriptoCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -27,7 +28,8 @@ import javax.inject.Inject
 class BitsoViewModel @Inject constructor(
     private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
     private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase,
-    private val loadLocalCriptoCurrencyUseCase: LoadLocalCriptoCurrencyUseCase
+    private val loadLocalCriptoCurrencyUseCase: LoadLocalCriptoCurrencyUseCase,
+    private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase
 ) :
     ViewModel() {
     var moneyCripto: MutableLiveData<List<CriptoCurrency>?> = MutableLiveData()
@@ -59,7 +61,7 @@ class BitsoViewModel @Inject constructor(
             if (loadLocalCriptoCurrencyUseCase.invoke().isEmpty()) {
                 val result = loadAllCriptoCurrencyUseCase()
                 if (result.isNotEmpty()) {
-                    loadLocalCriptoCurrencyUseCase.invoke(result)
+                    saveLocalCriptoCurrencyUseCase.invoke(result)
                     moneyCripto.postValue(result)
                 } else {
                     moneyCripto.postValue(null)

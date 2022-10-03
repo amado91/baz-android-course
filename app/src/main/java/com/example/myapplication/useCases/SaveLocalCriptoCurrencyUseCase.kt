@@ -6,10 +6,9 @@ import javax.inject.Inject
 
 /**
  * Created by: Juan Antonio Amado
- * date: 28,septiembre,2022
+ * date: 03,octubre,2022
  */
-class LoadLocalCriptoCurrencyUseCase @Inject constructor(private val repository: BitsoRepository) {
+class SaveLocalCriptoCurrencyUseCase @Inject constructor(private val repository: BitsoRepository) {
 
-    suspend operator fun invoke(): List<CriptoCurrency> = repository.loadCriptoList()
-
+    suspend operator fun invoke(list: List<CriptoCurrency>) = repository.saveDataList(list)
 }
