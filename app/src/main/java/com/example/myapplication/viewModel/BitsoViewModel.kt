@@ -8,9 +8,6 @@ import com.example.myapplication.model.AskAndBidResponse
 import com.example.myapplication.model.CriptoCurrency
 import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.repository.BitsoRepository
-import com.example.myapplication.model.AskAndBidResponse
-import com.example.myapplication.model.CriptoCurrency
-import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.useCases.LoadAllCriptoCurrencyUseCase
 import com.example.myapplication.useCases.LoadCriptoWithFilterCurrencyUseCase
 import com.example.myapplication.useCases.LoadLocalCriptoCurrencyUseCase
@@ -33,7 +30,8 @@ class BitsoViewModel @Inject constructor(
     private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
     private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase,
     private val loadLocalCriptoCurrencyUseCase: LoadLocalCriptoCurrencyUseCase,
-    private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase
+    private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase,
+    private val repository: BitsoRepository
 ) :
     ViewModel() {
     var moneyCripto: MutableLiveData<List<CriptoCurrency>?> = MutableLiveData()
@@ -81,7 +79,7 @@ class BitsoViewModel @Inject constructor(
     fun selectCriptoCurrency(id: String) {
         val compositeDisposable = CompositeDisposable()
         compositeDisposable.add(
-            bitsoRepository.loadSelectCriptoCurrency(idBook = id)
+            repository.loadSelectCriptoCurrency(idBook = id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { onSuccess: SelectCriptoResponse?, onError: Throwable? ->
