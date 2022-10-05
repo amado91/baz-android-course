@@ -4,13 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.api.RetroFitRxClient
-import com.example.myapplication.model.*
+import com.example.myapplication.model.AskAndBidResponse
+import com.example.myapplication.model.CriptoCurrency
+import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.useCases.LoadAllCriptoCurrencyUseCase
 import com.example.myapplication.useCases.LoadCriptoWithFilterCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,16 +24,19 @@ import javax.inject.Inject
  * date: 16,septiembre,2022
  */
 @HiltViewModel
-class BitsoViewModel @Inject constructor(private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
-private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase) :
+class BitsoViewModel @Inject constructor(
+    private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
+    private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase
+) :
     ViewModel() {
-    var moneyCripto: MutableLiveData<List<CriptoCurrency>> = MutableLiveData()
+    val _moneyCripto = MutableStateFlow<List<CriptoCurrency>>(listOf())
+    var moneyAllCripto: StateFlow<List<CriptoCurrency>>
+        get() = _moneyCripto
+        set(value) {
+            moneyAllCripto = value
+        }
     var selectMoneyCripto: MutableLiveData<SelectCriptoResponse?> = MutableLiveData()
     var askBidMoneyCripto: MutableLiveData<AskAndBidResponse?> = MutableLiveData()
-
-    fun getCriptoCurrency(): MutableLiveData<List<CriptoCurrency>> {
-        return moneyCripto
-    }
 
     fun getSelectCriptoCurrency(): MutableLiveData<SelectCriptoResponse?> {
         return selectMoneyCripto
@@ -43,14 +50,14 @@ private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase) :
     fun consultFilterCriptoCurrency() {
         viewModelScope.launch {
             val result = loadCriptoWithFilterCurrencyUseCase()
-            moneyCripto.postValue(result)
+            _moneyCripto.value = result
         }
     }
 
     fun consultAllcriptoCurrency() {
         viewModelScope.launch {
             val result = loadAllCriptoCurrencyUseCase()
-            moneyCripto.postValue(result)
+            _moneyCripto.value = result
         }
     }
 

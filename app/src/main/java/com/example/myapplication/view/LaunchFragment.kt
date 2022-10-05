@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
@@ -52,9 +53,9 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
             viewModel.consultFilterCriptoCurrency()
         }
 
-        viewModel.getCriptoCurrency().observe(viewLifecycleOwner) {
+        lifecycleScope.launchWhenCreated {
             binding.progressCircular.visibility = View.INVISIBLE
-            it?.let {
+            viewModel.moneyAllCripto.collect {
                 updateAdapter(it)
             }
         }
