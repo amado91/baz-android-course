@@ -9,7 +9,7 @@ import com.example.myapplication.model.CriptoResponse
  */
 interface BitsoRepository {
 
-   suspend fun loadCripto(): CriptoResponse
-   suspend fun loadCriptoList(): List<CriptoCurrency>
-   suspend fun saveDataList(data: List<CriptoCurrency>)
+    suspend fun loadCripto(): CriptoResponse
+    suspend fun loadCriptoList(): List<CriptoCurrency>
+    suspend fun saveDataList(data: List<CriptoCurrency>)
 }

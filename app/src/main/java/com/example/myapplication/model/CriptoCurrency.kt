@@ -2,7 +2,6 @@ package com.example.myapplication.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 /**
@@ -11,9 +10,9 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "currency")
 data class CriptoCurrency(
-    @ColumnInfo(name = "name")var name: String,
-    @ColumnInfo(name = "price")var price: String,
-    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "price") var price: String,
+    @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 )
 

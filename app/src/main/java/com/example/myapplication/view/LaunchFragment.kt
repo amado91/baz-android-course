@@ -66,7 +66,7 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
             response?.let {
                 updateAdapter(it)
 
-            } ?: Toast.makeText(requireContext(), getString(R.string.Not_Internet), Toast.LENGTH_SHORT).show()
+            } ?: Toast.makeText(requireContext(), getString(R.string.not_internet), Toast.LENGTH_SHORT).show()
 
         }
 

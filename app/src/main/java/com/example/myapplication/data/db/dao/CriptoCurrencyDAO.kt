@@ -12,7 +12,7 @@ interface CriptoCurrencyDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     @JvmSuppressWildcards
-    suspend fun insertAll(items: CriptoCurrency)
+    suspend fun insertAll(items: List<CriptoCurrency>)
 
     @Query("SELECT * FROM currency")
     fun getCriptoList(): List<CriptoCurrency>
