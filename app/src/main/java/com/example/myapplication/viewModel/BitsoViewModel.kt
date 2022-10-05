@@ -9,10 +9,13 @@ import com.example.myapplication.model.CriptoCurrency
 import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.useCases.LoadAllCriptoCurrencyUseCase
 import com.example.myapplication.useCases.LoadCriptoWithFilterCurrencyUseCase
+import com.example.myapplication.useCases.LoadLocalCriptoCurrencyUseCase
+import com.example.myapplication.useCases.SaveLocalCriptoCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -26,7 +29,9 @@ import javax.inject.Inject
 @HiltViewModel
 class BitsoViewModel @Inject constructor(
     private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
-    private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase
+    private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase,
+    private val loadLocalCriptoCurrencyUseCase: LoadLocalCriptoCurrencyUseCase,
+    private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase
 ) :
     ViewModel() {
     val _moneyCripto = MutableStateFlow<List<CriptoCurrency>>(listOf())
@@ -55,9 +60,20 @@ class BitsoViewModel @Inject constructor(
     }
 
     fun consultAllcriptoCurrency() {
-        viewModelScope.launch {
-            val result = loadAllCriptoCurrencyUseCase()
-            _moneyCripto.value = result
+        viewModelScope.launch(Dispatchers.IO) {
+            if (loadLocalCriptoCurrencyUseCase.invoke().isEmpty()) {
+                val result = loadAllCriptoCurrencyUseCase()
+                if (result.isNotEmpty()) {
+                    saveLocalCriptoCurrencyUseCase.invoke(result)
+                    _moneyCripto.value = result
+                } else {
+                    _moneyCripto.value = listOf()
+                }
+
+            } else {
+                _moneyCripto.value = loadLocalCriptoCurrencyUseCase.invoke()
+            }
+
         }
     }
 
@@ -95,6 +111,7 @@ class BitsoViewModel @Inject constructor(
                     onError?.let {
                         selectMoneyCripto.postValue(null)
                     }
-                })
+                }
+        )
     }
 }

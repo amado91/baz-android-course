@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,6 +48,14 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
         initWS()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initData()
+    }
+    private fun initData() {
+        viewModel.consultAllcriptoCurrency()
+    }
+
     private fun initWS() {
         viewModel.consultAllcriptoCurrency()
         binding.btnFilter.setOnClickListener {
@@ -57,7 +66,9 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
             binding.progressCircular.visibility = View.INVISIBLE
             viewModel.moneyAllCripto.collect {
                 updateAdapter(it)
-            }
+
+            } ?: Toast.makeText(requireContext(), getString(R.string.not_internet), Toast.LENGTH_SHORT).show()
+
         }
 
     }
