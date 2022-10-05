@@ -51,7 +51,6 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
         super.onResume()
         initData()
     }
-
     private fun initData() {
         viewModel.consultAllcriptoCurrency()
     }
@@ -63,14 +62,14 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
             viewModel.consultFilterCriptoCurrency()
         }
 
-        viewModel.getCriptoCurrency().observe(viewLifecycleOwner) {
+        viewModel.getCriptoCurrency().observe(viewLifecycleOwner) { response ->
             binding.progressCircular.visibility = View.INVISIBLE
-            it?.let {
+            response?.let {
                 updateAdapter(it)
-            } ?: Toast.makeText(requireContext(), "No tienes internet", Toast.LENGTH_SHORT)
-                .show()
-        }
 
+            } ?: Toast.makeText(requireContext(), getString(R.string.not_internet), Toast.LENGTH_SHORT).show()
+
+        }
 
     }
 

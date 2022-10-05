@@ -62,7 +62,7 @@ abstract class CriptoModule {
         }
 
         @Provides
-        fun providesRickAndMortyService(retrofit: Retrofit) = retrofit.create<ApiBitsoService>()
+        fun providesBitsoCurrencyService(retrofit: Retrofit) = retrofit.create<ApiBitsoService>()
 
         @Singleton
         @Provides

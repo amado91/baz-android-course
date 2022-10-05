@@ -8,8 +8,13 @@ import com.example.myapplication.model.AskAndBidResponse
 import com.example.myapplication.model.CriptoCurrency
 import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.repository.BitsoRepository
+import com.example.myapplication.model.AskAndBidResponse
+import com.example.myapplication.model.CriptoCurrency
+import com.example.myapplication.model.SelectCriptoResponse
 import com.example.myapplication.useCases.LoadAllCriptoCurrencyUseCase
 import com.example.myapplication.useCases.LoadCriptoWithFilterCurrencyUseCase
+import com.example.myapplication.useCases.LoadLocalCriptoCurrencyUseCase
+import com.example.myapplication.useCases.SaveLocalCriptoCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -27,7 +32,8 @@ import javax.inject.Inject
 class BitsoViewModel @Inject constructor(
     private val loadCriptoWithFilterCurrencyUseCase: LoadCriptoWithFilterCurrencyUseCase,
     private val loadAllCriptoCurrencyUseCase: LoadAllCriptoCurrencyUseCase,
-    private val bitsoRepository: BitsoRepository
+    private val loadLocalCriptoCurrencyUseCase: LoadLocalCriptoCurrencyUseCase,
+    private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase
 ) :
     ViewModel() {
     var moneyCripto: MutableLiveData<List<CriptoCurrency>?> = MutableLiveData()
@@ -56,17 +62,17 @@ class BitsoViewModel @Inject constructor(
 
     fun consultAllcriptoCurrency() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (bitsoRepository.loadCriptoList().isEmpty()) {
+            if (loadLocalCriptoCurrencyUseCase.invoke().isEmpty()) {
                 val result = loadAllCriptoCurrencyUseCase()
                 if (result.isNotEmpty()) {
-                    bitsoRepository.saveDataList(result)
+                    saveLocalCriptoCurrencyUseCase.invoke(result)
                     moneyCripto.postValue(result)
                 } else {
                     moneyCripto.postValue(null)
                 }
 
             } else {
-                moneyCripto.postValue(bitsoRepository.loadCriptoList())
+                moneyCripto.postValue(loadLocalCriptoCurrencyUseCase.invoke())
             }
 
         }
@@ -105,6 +111,7 @@ class BitsoViewModel @Inject constructor(
                     onError?.let {
                         selectMoneyCripto.postValue(null)
                     }
-                })
+                }
+        )
     }
 }
