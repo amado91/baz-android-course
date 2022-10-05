@@ -52,12 +52,12 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
         super.onResume()
         initData()
     }
+
     private fun initData() {
         viewModel.consultAllcriptoCurrency()
     }
 
     private fun initWS() {
-        viewModel.consultAllcriptoCurrency()
         binding.btnFilter.setOnClickListener {
             viewModel.consultFilterCriptoCurrency()
         }
@@ -65,12 +65,14 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
         lifecycleScope.launchWhenCreated {
             binding.progressCircular.visibility = View.INVISIBLE
             viewModel.moneyAllCripto.collect {
-                updateAdapter(it)
-
-            } ?: Toast.makeText(requireContext(), getString(R.string.not_internet), Toast.LENGTH_SHORT).show()
-
+                if (it.isEmpty()) {
+                    Toast.makeText(context, getString(R.string.not_internet), Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    updateAdapter(it)
+                }
+            }
         }
-
     }
 
     private fun updateAdapter(list: List<CriptoCurrency>) {
@@ -85,5 +87,4 @@ class LaunchFragment : Fragment(), OnclickListenerItem {
     companion object {
         const val ID_BITSO = "idBitso"
     }
-
 }
