@@ -7,13 +7,10 @@ import androidx.room.RoomDatabase
 import com.example.myapplication.data.db.dao.CriptoCurrencyDAO
 import com.example.myapplication.model.CriptoCurrency
 
-//@Database(entities = [CriptoCurrency::class, OtraTabla::class], version = 1, exportSchema = false)
 @Database(entities = [CriptoCurrency::class], version = 1, exportSchema = false)
 abstract class DataBase: RoomDatabase() {
 
     abstract fun criptoCurrencyDAO(): CriptoCurrencyDAO
-    //abstract fun employeeDAO(): EmployeeDAO
-
     companion object {
 
         @Volatile

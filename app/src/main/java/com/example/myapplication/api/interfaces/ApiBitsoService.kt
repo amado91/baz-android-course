@@ -3,9 +3,7 @@ package com.example.myapplication.api.interfaces
 import com.example.myapplication.model.AskAndBidResponse
 import com.example.myapplication.model.CriptoResponse
 import com.example.myapplication.model.SelectCriptoResponse
-import io.reactivex.Observable
 import io.reactivex.rxjava3.core.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
