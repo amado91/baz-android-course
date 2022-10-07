@@ -1,7 +1,6 @@
 package com.example.myapplication.network
 
 import com.example.myapplication.model.CriptoCurrency
-import com.example.myapplication.model.CriptoResponse
 
 /**
  * Created by: Juan Antonio Amado

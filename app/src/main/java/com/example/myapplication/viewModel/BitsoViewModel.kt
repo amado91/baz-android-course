@@ -16,6 +16,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,13 +34,14 @@ class BitsoViewModel @Inject constructor(
     private val saveLocalCriptoCurrencyUseCase: SaveLocalCriptoCurrencyUseCase
 ) :
     ViewModel() {
-    var moneyCripto: MutableLiveData<List<CriptoCurrency>?> = MutableLiveData()
+    val _moneyCripto = MutableStateFlow<List<CriptoCurrency>>(listOf())
+    var moneyAllCripto: StateFlow<List<CriptoCurrency>>
+        get() = _moneyCripto
+        set(value) {
+            moneyAllCripto = value
+        }
     var selectMoneyCripto: MutableLiveData<SelectCriptoResponse?> = MutableLiveData()
     var askBidMoneyCripto: MutableLiveData<AskAndBidResponse?> = MutableLiveData()
-
-    fun getCriptoCurrency(): MutableLiveData<List<CriptoCurrency>?> {
-        return moneyCripto
-    }
 
     fun getSelectCriptoCurrency(): MutableLiveData<SelectCriptoResponse?> {
         return selectMoneyCripto
@@ -52,7 +55,7 @@ class BitsoViewModel @Inject constructor(
     fun consultFilterCriptoCurrency() {
         viewModelScope.launch {
             val result = loadCriptoWithFilterCurrencyUseCase()
-            moneyCripto.postValue(result)
+            _moneyCripto.value = result
         }
     }
 
@@ -62,13 +65,13 @@ class BitsoViewModel @Inject constructor(
                 val result = loadAllCriptoCurrencyUseCase()
                 if (result.isNotEmpty()) {
                     saveLocalCriptoCurrencyUseCase.invoke(result)
-                    moneyCripto.postValue(result)
+                    _moneyCripto.value = result
                 } else {
-                    moneyCripto.postValue(null)
+                    _moneyCripto.value = listOf()
                 }
 
             } else {
-                moneyCripto.postValue(loadLocalCriptoCurrencyUseCase.invoke())
+                _moneyCripto.value = loadLocalCriptoCurrencyUseCase.invoke()
             }
 
         }

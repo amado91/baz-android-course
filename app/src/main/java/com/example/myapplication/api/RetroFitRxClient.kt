@@ -1,6 +1,5 @@
 package com.example.myapplication.api
 
-import com.example.myapplication.api.RetroFitRxClient.cliente
 import com.example.myapplication.api.interfaces.ApiBitsoService
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
@@ -19,7 +18,7 @@ object RetroFitRxClient {
     }
 
     val cliente = OkHttpClient.Builder()
-    .addInterceptor(interceptor)
+        .addInterceptor(interceptor)
 
 
     private val retrofitCatalog = Retrofit.Builder()

@@ -1,6 +1,5 @@
 package com.example.myapplication.view.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.databinding.ItemCriptoBinding
 import com.example.myapplication.model.CriptoCurrency
-import com.example.myapplication.model.Payload
 import com.example.myapplication.util.formatAsCurrency
 import com.example.myapplication.view.interfaces.OnclickListenerItem
 
